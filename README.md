@@ -1,4 +1,10 @@
-spring4
+Spring 4 / Angular
 =======
 
-Learn spring 4 for REST service and more...
+Learning Spring 4 and AngularJS.
+
+In this project I'm building a backend based on Spring 4.
+The front end is built with BootStrap 4 and AngularJS.
+
+Here you can find pure angular example witout backend:
+https://github.com/jvmvik/angular-demo/
