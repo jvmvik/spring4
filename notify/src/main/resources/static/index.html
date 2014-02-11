@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>Notification via WebSocket</title>
+    <script src="sockjs-0.3.4.js"></script>
+    <script src="stomp.js"></script>
+
+    <link rel="stylesheet"
+          href="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.min.css"/>
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+
+    <!-- Custom styles for this template -->
+    <link href="css/dashboard.css" rel="stylesheet"/>
+
+    <!-- Just for debugging purposes. Don't actually copy this line! -->
+    <!--[if lt IE 9]>
+    <script src="js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+<body ng-app="application">
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">Notification</a>
+        </div>
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">Home</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid" ng-controller="MainController">
+    <div class="row">
+        <div class="col-sm-3 col-md-3 sidebar">
+            Selection: {{ selected.message }}
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main">
+            <noscript>
+                <h2 style="color: #ff0000">Seems your browser doesn't support Javascript! Websocket relies on Javascript
+                    being enabled. Please enable
+                    Javascript and reload this page!</h2>
+            </noscript>
+        </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main">
+            <!-- <h1 class="page-header">Cell requested...</h1> -->
+            <h2 class="page-header">Twitts</h2>
+
+            <div class="form-group">
+                <button class="btn btn-default" id="connect" ng-disabled="{{isOnline}}" ng-click="connectOrDisconnect()">{{connectName}}</button>
+              </div>
+            <form class="form-inline" role="form">
+                <div class="form-group">
+                    <label for="name">What is the cell name?</label>
+                    <input class="form-control" type="text" id="name" ng-model="name"/>
+                </div>
+                <button class="btn btn-default" id="sendName" ng-click="sendName(name)">Send</button>
+            </form>
+
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Messages</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr ng-repeat="twitt in twitts" ng-click="markAsSelected(twitt)">
+                        <td>{{twitt.message}}</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/jquery-1.11.0.min.js"></script>
+
+<script src="js/bootstrap.min.js"></script>
+<script src="js/angular.js"></script>
+
+<script src="app.js"></script>
+</body>
+</html>
