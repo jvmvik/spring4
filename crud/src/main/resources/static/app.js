@@ -13,7 +13,7 @@ function TableController($scope, $timeout, $http)
 
     $scope.update = function()
     {
-        $http.get('/cell/all').success(function(data, status)
+        $http.get('cell/all').success(function(data, status)
         {
             console.log("Pull cells from REST service");
             $scope.cells = data;

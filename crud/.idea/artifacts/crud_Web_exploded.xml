@@ -2,6 +2,7 @@
   <artifact type="exploded-war" name="crud:Web exploded">
     <output-path>$PROJECT_DIR$/build/classes/artifacts/crud_Web_exploded</output-path>
     <root id="root">
+      <element id="javaee-facet-resources" facet="crud/web/Web2" />
       <element id="directory" name="WEB-INF">
         <element id="directory" name="classes">
           <element id="module-output" name="crud" />
@@ -60,9 +61,7 @@
           <element id="library" level="project" name="Gradle: spring-data-commons-1.6.3.RELEASE" />
           <element id="library" level="project" name="Gradle: spring-data-jpa-1.4.3.RELEASE" />
         </element>
-        <element id="javaee-facet-resources" facet="crud/web/Web2" />
       </element>
-      <element id="javaee-facet-resources" facet="crud/web/Web2" />
     </root>
   </artifact>
 </component>
