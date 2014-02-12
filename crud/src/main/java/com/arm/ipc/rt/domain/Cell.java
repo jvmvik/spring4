@@ -1,34 +1,36 @@
 package com.arm.ipc.rt.domain;
 
+import org.springframework.data.annotation.Id;
+
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import java.util.UUID;
 
 /**
- * Simple Cell object
- *
- * @date 2/9/14
+ * Simple Cell Entity
  */
+@Entity
 public class Cell
 {
 
-  UUID key;
+  @Id
+  @GeneratedValue(strategy= GenerationType.AUTO)
+  private long id;
+
   String name;
   String status;
 
+
   public Cell(String name, String status)
   {
-    this.key = UUID.randomUUID();
     this.name = name;
     this.status = status;
   }
 
-  public UUID getKey()
+  public long getId()
   {
-    return key;
-  }
-
-  public void setKey(UUID key)
-  {
-    this.key = key;
+    return id;
   }
 
   public String getName()
@@ -49,5 +51,15 @@ public class Cell
   public void setStatus(String status)
   {
     this.status = status;
+  }
+
+  @Override
+  public String toString()
+  {
+    return "Cell{" +
+        "id=" + id +
+        ", name='" + name + '\'' +
+        ", status='" + status + '\'' +
+        '}';
   }
 }

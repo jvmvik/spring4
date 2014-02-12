@@ -1,7 +1,6 @@
 
 var app = angular.module("application", []);
 
-//TODO Inject http service and load node.json
 function TableController($scope, $timeout, $http)
 {
     $scope.cells = [];
