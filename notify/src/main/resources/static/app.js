@@ -20,13 +20,13 @@ app.service('$stomp', [function()
 
     this.connect = function()
     {
-        var socket = new SockJS('ws://localhost:8080/notify/update');
+        var socket = new SockJS('/update');
         stompClient = Stomp.over(socket);
         stompClient.connect('', '', function(frame)
         {
             setConnected(true);
             console.log('Connected: ' + frame);
-            stompClient.subscribe('topic/cell', function(msg)
+            stompClient.subscribe('/topic/cell', function(msg)
             {
                 var twitt = JSON.parse(msg.body);
                 onMessage(twitt);
@@ -43,7 +43,7 @@ app.service('$stomp', [function()
 
     this.send = function(name)
     {
-        stompClient.send("app/update", {}, JSON.stringify({ 'name': name }));
+        stompClient.send("/app/update", {}, JSON.stringify({ 'name': name }));
     };
 }]);
 
@@ -87,10 +87,17 @@ app.controller('MainController', [ '$scope', '$stomp', function($scope, $stomp)
 
     $stomp.init(function(online)
             {
-                $scope.isOnline = online;
-            }, function (twitt)
+                $scope.$apply(function()
+                {
+                    $scope.isOnline = online;
+                });
+            },
+            function (twitt)
             {
-                $scope.twitts.push(twitt)
+                $scope.$apply(function()
+                {
+                    $scope.twitts.push(twitt);
+                });
             });
 
     console.log("Controller loaded...");
