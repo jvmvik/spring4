@@ -1,10 +1,9 @@
 package com.arm.ipc.rt;
 
 import com.arm.ipc.rt.domain.Cell;
+import com.arm.ipc.rt.domain.CellRepository;
 import org.springframework.boot.SpringApplication;
 import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.H2;
-
-import java.util.List;
 
 import javax.sql.DataSource;
 
@@ -15,6 +14,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.data.web.config.EnableSpringDataWebSupport;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -22,12 +22,14 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.Database;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
+
 import java.io.IOException;
 
 @Configuration
 @ComponentScan
-@EnableJpaRepositories
 @EnableAutoConfiguration
+@EnableJpaRepositories
 public class Application
 {
   ///   https://github.com/spring-projects/spring-boot/tree/master/spring-boot-samples/spring-boot-sample-data-jpa/src/main/java/sample/data/jpa/service
@@ -35,20 +37,7 @@ public class Application
   {
     SpringApplication.run(Application.class, args);
     System.out.println("Application started: http://localhost:8080");
-
-    bootStrap();
-    startBrowser();
-  }
-
-  private static void bootStrap()
-  {
-    AbstractApplicationContext context = new AnnotationConfigApplicationContext(Application.class);
-    CellRepository repository = context.getBean(CellRepository.class);
-
-    // save a couple of customers
-    repository.save(new Cell("INV", "New"));
-    repository.save(new Cell("XOR", "New"));
-    System.out.println("2 cells added..");
+    //startBrowser();
   }
 
   private static void startBrowser()
@@ -82,7 +71,7 @@ public class Application
     LocalContainerEntityManagerFactoryBean lef = new LocalContainerEntityManagerFactoryBean();
     lef.setDataSource(dataSource);
     lef.setJpaVendorAdapter(jpaVendorAdapter);
-    lef.setPackagesToScan("hello");
+    lef.setPackagesToScan("com.arm.ipc.rt.domain");
     return lef;
   }
 
@@ -101,5 +90,6 @@ public class Application
   {
     return new JpaTransactionManager();
   }
+
 }
 

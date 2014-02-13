@@ -54,13 +54,16 @@
 <div class="container-fluid" ng-controller="TableController">
     <div class="row">
         <div class="col-sm-3 col-md-3 sidebar">
-            Selection: {{ selected.name }}
+            Selection: {{ cell.name }}
         </div>
 
-        <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main" >
+        <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main">
             <!-- <h1 class="page-header">Cell requested...</h1> -->
             <h2 class="page-header">Cell requested</h2>
-            <h3><button class="btn btn-default" ng-click="update()">Update</button></h3>
+
+            <h3>
+                <button class="btn btn-default" ng-click="update()">Update</button>
+            </h3>
             <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
@@ -80,6 +83,22 @@
                 </table>
             </div>
         </div>
+
+        <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main">
+            <form role="form" name="cellForm">
+                <div class="form-group">
+                    <label for="name">Name:</label>
+                    <input id="name" class="form-control" type="text" ng-model="cell.name" required="true"/>
+                    <span class="alert" ng-show="cellForm.input.$error.required">Required!</span><br/>
+                </div>
+                <div class="form-group">
+                    <label for="status">Status:</label>
+                    <input id="status" class="form-control" type="text" ng-model="cell.status" required="true"/>
+                    <span class="alert" ng-show="cellForm.input.$error.required">Required!</span><br/>
+                </div>
+                <button class="btn btn-default" type="submit" ng-click="save()">Submit</button>
+            </form>
+        </div>
     </div>
 </div>
 
@@ -91,6 +110,7 @@
 
 <script src="js/bootstrap.min.js"></script>
 <script src="js/angular.js"></script>
+<script src="js/angular-resource.js"></script>
 
 <script src="app.js"></script>
 </body>

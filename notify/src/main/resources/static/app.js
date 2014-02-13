@@ -20,13 +20,13 @@ app.service('$stomp', [function()
 
     this.connect = function()
     {
-        var socket = new SockJS('/update');
+        var socket = new SockJS('ws://localhost:8080/notify/update');
         stompClient = Stomp.over(socket);
         stompClient.connect('', '', function(frame)
         {
             setConnected(true);
             console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/cell', function(msg)
+            stompClient.subscribe('topic/cell', function(msg)
             {
                 var twitt = JSON.parse(msg.body);
                 onMessage(twitt);
@@ -43,7 +43,7 @@ app.service('$stomp', [function()
 
     this.send = function(name)
     {
-        stompClient.send("/app/update", {}, JSON.stringify({ 'name': name }));
+        stompClient.send("app/update", {}, JSON.stringify({ 'name': name }));
     };
 }]);
 
@@ -92,19 +92,6 @@ app.controller('MainController', [ '$scope', '$stomp', function($scope, $stomp)
             {
                 $scope.twitts.push(twitt)
             });
-
-/*    $scope.update = function()
-    {
-        $http.get('/cell/all').success(function(data, status)
-        {
-            console.log("Pull cells from REST service");
-            $scope.cells = data;
-        }).error(function(data, status)
-        {
-            alert("Error: " + status);
-        });
-    }
-        */
 
     console.log("Controller loaded...");
 }]);

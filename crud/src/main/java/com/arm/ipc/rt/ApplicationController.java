@@ -1,25 +1,27 @@
 package com.arm.ipc.rt;
 
 import com.arm.ipc.rt.domain.Cell;
+import com.arm.ipc.rt.domain.CellRepository;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.http.HttpRequest;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.xml.ws.Response;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @Controller
 public class ApplicationController
 {
+
   @Autowired
   CellRepository cellRepository;
 
@@ -30,13 +32,31 @@ public class ApplicationController
     return "index";
   }
 
-  @RequestMapping("/cell/all")
-  @Transactional(readOnly = true)
+  /*
+   * REST
+   */
+  @RequestMapping(value="/cell", method = RequestMethod.PUT)
+  public @ResponseBody String save(@RequestBody Cell cell)
+  {
+    // Check if cell exists
+    Cell c = cellRepository.findOne(cell.getId());
+    if(c == null)
+      return "fail";
+
+    // Update entity
+    cellRepository.save(cell);
+    return "ok";
+  }
+
+  @RequestMapping(value = "/cell", method = RequestMethod.GET)
   public @ResponseBody List<Cell> all()
   {
     List<Cell> cells = new ArrayList<>();
     for(Cell cell: cellRepository.findAll())
+    {
       cells.add(cell);
+    }
     return cells;
   }
+
 }
