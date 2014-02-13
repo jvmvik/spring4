@@ -10,10 +10,7 @@ import java.util.UUID;
 public class Cell
 {
 
-  //UUID key;
   private String name;
-  //String status;
-
 
   public String getName()
   {

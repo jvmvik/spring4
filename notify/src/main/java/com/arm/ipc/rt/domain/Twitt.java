@@ -1,10 +1,7 @@
 package com.arm.ipc.rt.domain;
 
 /**
- * Forecast controller
- *
- * @author victor@milkyway.io
- * @date 2/10/14
+ * Represent a message
  */
 public class Twitt
 {
