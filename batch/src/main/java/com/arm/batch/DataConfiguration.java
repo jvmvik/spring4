@@ -1,7 +1,12 @@
 package com.arm.batch;
 
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.orm.hibernate4.LocalSessionFactoryBean;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
@@ -18,6 +23,9 @@ import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.
  *
  * @author vicben01
  */
+
+@Configuration
+@EnableJpaRepositories
 public class DataConfiguration
 {
   @Bean
@@ -32,7 +40,7 @@ public class DataConfiguration
     LocalContainerEntityManagerFactoryBean lef = new LocalContainerEntityManagerFactoryBean();
     lef.setDataSource(dataSource);
     lef.setJpaVendorAdapter(jpaVendorAdapter);
-    lef.setPackagesToScan("com.arm.ipc.rt.domain");
+    lef.setPackagesToScan("com.arm.batch.domain");
     return lef;
   }
 
@@ -41,7 +49,7 @@ public class DataConfiguration
   {
     HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
     hibernateJpaVendorAdapter.setShowSql(false);
-    hibernateJpaVendorAdapter.setGenerateDdl(true);
+    hibernateJpaVendorAdapter.setGenerateDdl(false);
     hibernateJpaVendorAdapter.setDatabase(Database.H2);
     return hibernateJpaVendorAdapter;
   }
@@ -51,4 +59,14 @@ public class DataConfiguration
   {
     return new JpaTransactionManager();
   }
+
+  @Bean
+  public LocalSessionFactoryBean sessionFactory() {
+    LocalSessionFactoryBean factory = new LocalSessionFactoryBean();
+    factory.setDataSource(dataSource());
+    factory.setPackagesToScan(new String[]{"spring.batch.example.model"});
+    return factory;
+  }
+
+
 }
