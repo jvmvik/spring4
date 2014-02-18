@@ -2,19 +2,11 @@ package com.arm.ipc.rt;
 
 import com.arm.ipc.rt.domain.Cell;
 import com.arm.ipc.rt.domain.CellRepository;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpRequest;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import javax.xml.ws.Response;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,11 +33,24 @@ public class ApplicationController
     // Check if cell exists
     Cell c = cellRepository.findOne(cell.getId());
     if(c == null)
-      return "fail";
+      c = cell; // Create a new cell
 
     // Update entity
-    cellRepository.save(cell);
+    cellRepository.save(c);
     return "ok";
+  }
+
+  @RequestMapping(value="/cell", method = RequestMethod.DELETE)
+  public void remove(@RequestBody Cell cell)
+  {
+    // Check if cell exists
+    Cell c = cellRepository.findOne(cell.getId());
+    if(c == null)
+     throw new NotFoundException("Cell is not found: " + cell);
+
+    // Update entity
+    cellRepository.delete(c);
+   // return "ok";
   }
 
   @RequestMapping(value = "/cell", method = RequestMethod.GET)

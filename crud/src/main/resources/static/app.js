@@ -5,12 +5,12 @@ app.factory('$cell', function ($resource) {
     return $resource('cell', {}, {
         show: { method: 'GET', isArray: true },
         update: { method: 'PUT' }, //GET
-        delete: { method: 'DELETE'}
+        remove: { method: 'DELETE'}
     })
 });
 
 
-app.controller('TableController', ['$scope', '$timeout', '$http', '$cell', function($scope, $timeout, $http, $cell)
+app.controller('ApplicationController', ['$scope', '$timeout', '$http', '$cell', function($scope, $timeout, $http, $cell)
 {
     $scope.cells = [];
     $scope.cell = {name: "Nothing selected"};
@@ -19,7 +19,7 @@ app.controller('TableController', ['$scope', '$timeout', '$http', '$cell', funct
        $scope.cell = cell;
     };
 
-    $scope.update = function()
+    $scope.refresh = function()
     {
         $cell.show(function(data)
         {
@@ -30,14 +30,20 @@ app.controller('TableController', ['$scope', '$timeout', '$http', '$cell', funct
         {
             alert("Error: " + status);
         });
-    }
+    };
+
+    $scope.create = function()
+    {
+         $scope.cell = {name: "", status: "New"};
+         $scope.markAsSelected($scope.cell);
+    } ;
 
     $scope.save = function()
     {
         $cell.update($scope.cell,
            function(data)
            {
-             $scope.update();
+             $scope.refresh();
            },
            //error
            function( error )
@@ -45,9 +51,22 @@ app.controller('TableController', ['$scope', '$timeout', '$http', '$cell', funct
             console.log(error);
            }
         );
-    }
+    };
 
-    $scope.update();
+    $scope.remove = function(cell)
+    {
+        $cell.remove(cell,
+            function(data)
+            {
+                $scope.refresh();
+            },
+            function(error)
+            {
+                console.log(error);
+            });
+    };
+
+    $scope.refresh();
 
     console.log("Table controller is loaded...");
 }]);

@@ -51,7 +51,7 @@
     </div>
 </div>
 
-<div class="container-fluid" ng-controller="TableController">
+<div class="container-fluid" ng-controller="ApplicationController">
     <div class="row">
         <div class="col-sm-3 col-md-3 sidebar">
             Selection: {{ cell.name }}
@@ -62,7 +62,7 @@
             <h2 class="page-header">Cell requested</h2>
 
             <h3>
-                <button class="btn btn-default" ng-click="update()">Update</button>
+                <button class="btn btn-default" ng-click="refresh()">Refresh</button>
             </h3>
             <div class="table-responsive">
                 <table class="table table-striped">
@@ -74,10 +74,11 @@
                     </tr>
                     </thead>
                     <tbody>
-                    <tr ng-repeat="cell in cells" ng-click="markAsSelected(cell)">
-                        <td>{{cell.id}}</td>
-                        <td>{{cell.name}}</td>
-                        <td>{{cell.status}}</td>
+                    <tr ng-repeat="cell in cells">
+                        <td ng-click="markAsSelected(cell)">{{cell.id}}</td>
+                        <td ng-click="markAsSelected(cell)">{{cell.name}}</td>
+                        <td ng-click="markAsSelected(cell)">{{cell.status}}</td>
+                        <td><button type="button" class="btn btn-default btn-sm" ng-click="remove(cell)"><span class="icon-remove"></span></button> </td>
                     </tr>
                     </tbody>
                 </table>
@@ -85,6 +86,7 @@
         </div>
 
         <div class="col-sm-9 col-sm-offset-3 col-md-9 col-md-offset-3 main">
+            <button class="btn btn-default" ng-click="create()">Create cell</button>
             <form role="form" name="cellForm">
                 <div class="form-group">
                     <label for="name">Name:</label>
@@ -96,7 +98,7 @@
                     <input id="status" class="form-control" type="text" ng-model="cell.status" required="true"/>
                     <span class="alert" ng-show="cellForm.input.$error.required">Required!</span><br/>
                 </div>
-                <button class="btn btn-default" type="submit" ng-click="save()">Submit</button>
+                <button class="btn btn-default" type="submit" ng-click="save()">Save</button>
             </form>
         </div>
     </div>
