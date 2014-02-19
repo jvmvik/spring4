@@ -11,12 +11,13 @@ import org.springframework.batch.core.step.tasklet.SystemCommandTasklet;
 import org.springframework.batch.core.step.tasklet.Tasklet;
 import org.springframework.batch.item.*;
 import org.springframework.batch.item.database.HibernateItemWriter;
+import org.springframework.batch.item.file.MultiResourceItemReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * TODO describe
+ * Batch
  *
  * @author vicben01
  */
@@ -28,12 +29,12 @@ public class BatchConfiguration
 
   // tag::jobstep[]
   @Bean
-  public Job job(JobBuilderFactory jobs, Step report, Step publish)
+  public Job job(JobBuilderFactory jobs, Step capture, Step push)
   {
     return jobs.get("report")
         .incrementer(new RunIdIncrementer())
-        .start(report)
-        .next(publish)
+        .start(capture)
+        .next(push) // .next(compare)
         .build();
   }
 
@@ -49,15 +50,15 @@ public class BatchConfiguration
   }
 
   @Bean
-  public ItemProcessor<Cell, Cell> cellProcessor()
+  public ItemProcessor<CellItem, Cell> cellProcessor()
   {
     return new ReportProcessor();
   }
 
   @Bean
-  public ItemReader<Cell> reportReader()
+  public ItemReader<CellItem> cellReader()
   {
-    return new ReportReader();
+    return new MultiLineReportItemReader();
   }
 
   @Bean
@@ -68,17 +69,26 @@ public class BatchConfiguration
     return writer;
   }
 
+  // Capture DSSC content
   @Bean
-  public Step report(StepBuilderFactory stepBuilderFactory, Tasklet dsscTasklet)
+  public Step capture(StepBuilderFactory stepBuilderFactory, Tasklet dsscTasklet)
   {
-    return stepBuilderFactory.get("dssc").tasklet(dsscTasklet).build();
+    return stepBuilderFactory.get("capture").tasklet(dsscTasklet).build();
   }
 
+  // Push report in database
   @Bean
-  public Step publish(StepBuilderFactory stepBuilderFactory, ItemReader<Cell> reportReader, ItemProcessor reportProcessor, ItemWriter reportWriter)
+  public Step push(StepBuilderFactory stepBuilderFactory, ItemReader<CellItem> cellReader, ItemProcessor<CellItem, Cell> cellProcessor, ItemWriter<Cell> cellWriter)
   {
-    return stepBuilderFactory.get("publish").chunk(10).reader(reportReader).processor(reportProcessor).writer(reportWriter).build();
+    return stepBuilderFactory
+            .get("push")
+            .<CellItem, Cell>chunk(10)
+            .reader(cellReader)
+            .processor(cellProcessor)
+            .writer(cellWriter)
+            .build();
   }
-  // end::jobstep[]
+
+  // Compare archetype versus root cell
 
 }

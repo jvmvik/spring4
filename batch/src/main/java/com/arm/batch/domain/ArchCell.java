@@ -19,7 +19,7 @@ public class ArchCell extends Cell
   public ArchCell(String name, Date lastCommit, Long projectID)
   {
     setName(name);
-    setLastCommit(lastCommit);
+    setLastLayoutCommit(lastCommit);
     setProjectID(projectID);
   }
 }

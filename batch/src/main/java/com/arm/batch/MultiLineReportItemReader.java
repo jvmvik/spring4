@@ -2,26 +2,17 @@ package com.arm.batch;
 
 import com.arm.batch.domain.Cell;
 import org.springframework.batch.item.ItemReader;
-import org.springframework.batch.item.NonTransientResourceException;
-import org.springframework.batch.item.ParseException;
-import org.springframework.batch.item.UnexpectedInputException;
 import org.springframework.batch.item.file.FlatFileItemReader;
 import org.springframework.batch.item.file.transform.FieldSet;
 
-/import org.springframework.batch.item.ExecutionContext;
-import org.springframework.batch.item.ItemReader;
+import org.springframework.batch.item.ExecutionContext;
 import org.springframework.batch.item.ItemStream;
 import org.springframework.batch.item.ItemStreamException;
-import org.springframework.batch.item.file.FlatFileItemReader;
-import org.springframework.batch.item.file.transform.FieldSet;
-import org.springframework.batch.sample.domain.trade.Trade;
-import org.springframework.util.Assert;
 
 /**
- * @author Dan Garrette
- * @since 2.0
+ *
  */
-public class MultiLineReportItemReader implements ItemReader<Cell>, ItemStream
+public class MultiLineReportItemReader implements ItemReader<CellItem>, ItemStream
 {
   private FlatFileItemReader<FieldSet> delegate;
 
@@ -41,10 +32,17 @@ public class MultiLineReportItemReader implements ItemReader<Cell>, ItemStream
         t = new CellItem(); // Record must start with 'BEGIN'
         t.setDirectoryLine(prefix);
       }
-      else if(prefix.indexOf("//") == 3)
+      else if(prefix.indexOf("/") == 3)
       {
-        t.setActiveLine(prefix);
-        return t;
+        if(prefix.contains(CellItem.LAYOUT))
+          t.setLayout(prefix);
+        else if(prefix.contains(CellItem.SCHEMATIC))
+          t.setSchematic(prefix);
+        else if(prefix.contains(CellItem.SYMBOL))
+          t.setSymbol(prefix);
+
+        if(t.isCompleted())
+         return t;
       }
     }
     //Assert.isNull(t, "No 'END' was found.");
