@@ -1,26 +1,32 @@
 package com.arm.batch;
 
 import com.arm.batch.domain.Cell;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 
 import java.util.List;
 
 /**
- * Evaluate if cell is old
+ * Create cell from cell item.
  *
  * @author vicben01
  */
-public class ReportProcessor implements ItemProcessor<Cell, Cell>
+public class ReportProcessor implements ItemProcessor<CellItem, Cell>
 {
-  //@Autowired
-  //CellRepository cellRepository;
 
+  @Value("#{jobParameters[productID]}")
+  Long productID;
+
+  @StepScope
   @Override
-  public Cell process(Cell cell) throws Exception
+  public Cell process(CellItem item) throws Exception
   {
-    // TODO Find achetype that are newer than the current cell
-    // TODO Update cell status
+    Cell cell = new Cell();
+    cell.setName(item.getName());
+    cell.setLastLayoutCommit(item.getLastLayoutCommit());
     return cell;
   }
 }
+

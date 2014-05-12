@@ -10,6 +10,7 @@ import org.springframework.context.annotation.ComponentScan;
  *
  * @author vicben01
  */
+
 @ComponentScan
 @EnableAutoConfiguration
 @EnableBatchProcessing
