@@ -1,15 +1,13 @@
 buildscript {
-    ext {
-        springBootVersion = '1.0.0.RC1'
+  repositories {
+    maven {
+      url "http://repo.spring.io/libs-milestone"
     }
-    repositories {
-        maven { url "http://repo.spring.io/libs-snapshot" }
-        maven { url "http://repo.spring.io/milestone" }
-        mavenLocal()
-    }
-    dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-    }
+    mavenLocal()
+  }
+  dependencies {
+    classpath("org.springframework.boot:spring-boot-gradle-plugin:1.0.2.RELEASE")
+  }
 }
 
 apply plugin: 'java'
@@ -18,9 +16,13 @@ apply plugin: 'idea'
 apply plugin: 'spring-boot'
 apply plugin: 'war'
 
-jar {
-    baseName = 'gs-messaging-stomp-websocket'
-    version =  '0.1.0'
+configurations {
+  providedRuntime
+}
+
+war {
+  baseName = 'ROOT'
+  //version = '0.1.0'
 }
 
 repositories {
@@ -29,9 +31,11 @@ repositories {
 }
 
 dependencies {
-    compile("org.springframework.boot:spring-boot-starter-web:0.5.0.BUILD-SNAPSHOT")
-    compile("org.springframework.boot:spring-boot-starter-websocket:0.5.0.BUILD-SNAPSHOT")
-    compile("org.springframework:spring-messaging:4.0.0.RELEASE")
+    compile("org.springframework.boot:spring-boot-starter-actuator")
+    compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-websocket")
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
+    compile("org.springframework:spring-messaging")
     compile("com.fasterxml.jackson.core:jackson-databind")
     testCompile("junit:junit:4.11")
 }

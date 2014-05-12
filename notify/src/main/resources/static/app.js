@@ -1,7 +1,7 @@
 
 var app = angular.module("application", []);
 
-app.service('$stomp', [function()
+app.service('$stomp', ['$location', function($location)
 {
     var stompClient = null;
     var setConnected = null;
