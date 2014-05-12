@@ -19,7 +19,7 @@ import javax.sql.DataSource;
 import static org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType.H2;
 
 /**
- * TODO describe
+ * DataConfiguration
  *
  * @author vicben01
  */
@@ -64,9 +64,8 @@ public class DataConfiguration
   public LocalSessionFactoryBean sessionFactory() {
     LocalSessionFactoryBean factory = new LocalSessionFactoryBean();
     factory.setDataSource(dataSource());
-    factory.setPackagesToScan(new String[]{"spring.batch.example.model"});
+    factory.setPackagesToScan(new String[]{"com.arm.batch.domain"});
     return factory;
   }
-
 
 }

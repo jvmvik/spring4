@@ -25,7 +25,7 @@ public class Cell implements Serializable
   private String name;
 
   //@DateTimeFormat
-  private Date lastCommit;
+  private Date lastLayoutCommit;
 
   @NotNull
   private Long projectID;
@@ -64,14 +64,14 @@ public class Cell implements Serializable
     this.name = name;
   }
 
-  public Date getLastCommit()
+  public Date getLastLayoutCommit()
   {
-    return lastCommit;
+    return lastLayoutCommit;
   }
 
-  public void setLastCommit(Date lastCommit)
+  public void setLastLayoutCommit(Date lastLayoutCommit)
   {
-    this.lastCommit = lastCommit;
+    this.lastLayoutCommit = lastLayoutCommit;
   }
 
   public Long getProjectID()

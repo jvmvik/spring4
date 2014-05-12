@@ -22,7 +22,7 @@ public class RootCell extends Cell
   public RootCell(String name, Date lastCommit, Long projectID)
   {
     setName(name);
-    setLastCommit(lastCommit);
+    setLastLayoutCommit(lastCommit);
     setProjectID(projectID);
     setStatus("init");
   }

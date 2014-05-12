@@ -6,15 +6,13 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.batch.core.repository.JobInstanceAlreadyCompleteException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TODO describe
+ * Application main controller
  *
  * @author vicben01
  */
@@ -28,7 +26,7 @@ public class ApplicationController
   }
 
   @Autowired
-  JobLauncher jobLauncher;
+  JobLauncher launcher;
 
   @Autowired
   Job job;
@@ -37,11 +35,13 @@ public class ApplicationController
   public @ResponseBody String handle(@RequestParam String repository) throws Exception
   {
     Map<String, JobParameter> parameters = new HashMap<String, JobParameter>();
+    parameters.put("projectID", new JobParameter("1"));
     parameters.put("repository", new JobParameter(repository));
+    parameters.put("type", new JobParameter("archetype")); // root
 
     try
     {
-      jobLauncher.run(job, new JobParameters(parameters));
+      launcher.run(job, new JobParameters(parameters));
       return "ok";
     }
     catch (JobInstanceAlreadyCompleteException exception)
